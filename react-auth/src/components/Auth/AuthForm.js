@@ -65,7 +65,12 @@ const AuthForm = () => {
       })
       .then((data) => {
         console.log("Success:", data);
-        authCtx.login(data.idToken);
+
+        //Converting expiration time to milliseconds and passing it in function
+        const expirationTime = new Date(
+          new Date().getTime() + +data.expiresIn * 1000
+        );
+        authCtx.login(data.idToken, expirationTime.toISOString());
         redirection.replace("/");
       })
       .catch((err) => {
